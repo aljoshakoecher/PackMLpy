@@ -36,10 +36,10 @@ class AbortingState(State):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Aborting -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Aborting)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 
 		# Make sure the current state is still Aborting before going to Aborted (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), AbortingState)):
-			stateMachine.setStateAndRunAction(AbortedState())
+			coro = stateMachine.setStateAndRunAction(AbortedState())

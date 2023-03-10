@@ -30,11 +30,11 @@ class HoldingState (StoppableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Holding)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 		
 		# Make sure the current state is still Holding before going to Held (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), HoldingState)):
-			stateMachine.setStateAndRunAction(HeldState())
+			coro = stateMachine.setStateAndRunAction(HeldState())
 

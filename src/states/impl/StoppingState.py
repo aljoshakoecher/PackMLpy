@@ -31,11 +31,11 @@ class StoppingState (AbortableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Stopping -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Stopping)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 
 		# Make sure the current state is still Stopping before going to Stopped (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), StoppingState)):
-			stateMachine.setStateAndRunAction(StoppedState())
+			coro = stateMachine.setStateAndRunAction(StoppedState())
 

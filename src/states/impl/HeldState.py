@@ -15,7 +15,7 @@ class HeldState (StoppableState):
 		pass # Hold cannot be fired from Held -> Do nothing except maybe giving a warning
 
 	def unhold(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(UnholdingState())
+		coro = stateMachine.setStateAndRunAction(UnholdingState())
 
 	def suspend(self, stateMachine: Isa88StateMachine):
 		pass # Suspend cannot be fired from Held -> Do nothing except maybe giving a warning

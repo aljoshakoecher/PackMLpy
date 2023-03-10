@@ -33,10 +33,10 @@ class ClearingState(AbortableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Clearing -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Clearing)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 
 		# Make sure the current state is still Clearing before going to Stopped (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), ClearingState)):
-			stateMachine.setStateAndRunAction(StoppedState())
+			coro = stateMachine.setStateAndRunAction(StoppedState())

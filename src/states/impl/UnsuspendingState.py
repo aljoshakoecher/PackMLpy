@@ -1,7 +1,7 @@
 from statemachine.Isa88StateMachine import Isa88StateMachine
 from states.StoppableState import StoppableState
 from states.ActiveStateName import ActiveStateName
-from states.impl import ExecuteState
+from states.impl.ExecuteState import ExecuteState
 
 
 class UnsuspendingState (StoppableState):
@@ -31,10 +31,10 @@ class UnsuspendingState (StoppableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Unsuspending -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Unsuspending)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 
 		# Make sure the current state is still Unsuspending before going to Execute (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), UnsuspendingState)):
-			stateMachine.setStateAndRunAction(ExecuteState())
+			coro = stateMachine.setStateAndRunAction(ExecuteState())

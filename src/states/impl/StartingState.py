@@ -1,7 +1,7 @@
 from statemachine.Isa88StateMachine import Isa88StateMachine
 from states.ActiveStateName import ActiveStateName
 from states.StoppableState import StoppableState
-from states.impl import ExecuteState
+from states.impl.ExecuteState import ExecuteState
 
 class StartingState (StoppableState):
 	"""
@@ -30,11 +30,11 @@ class StartingState (StoppableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Starting)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 		
 		# Make sure the current state is still Starting before going to Execute (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), StartingState)):
-			stateMachine.setStateAndRunAction(ExecuteState())
+			coro = stateMachine.setStateAndRunAction(ExecuteState())
 

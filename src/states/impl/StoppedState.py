@@ -24,7 +24,7 @@ class StoppedState (AbortableState):
 		pass # Unsuspend cannot be fired from Stopped -> Do nothing except maybe giving a warning
 
 	def reset(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(ResettingState())
+		coro = stateMachine.setStateAndRunAction(ResettingState())
 
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Stopped -> Do nothing except maybe giving a warning

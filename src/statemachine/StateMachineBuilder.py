@@ -1,5 +1,5 @@
 from statemachine.Isa88StateMachine import Isa88StateMachine
-from states.IState import IState
+from states.State import State
 from states.StateAction import StateAction
 from states.ActiveStateName import ActiveStateName
 from states.impl.IdleState import IdleState
@@ -15,7 +15,7 @@ class StateMachineBuilder:
 		self.stateMachine = Isa88StateMachine(IdleState())
 
 	
-	def withInitialState(self, initialState: IState) :  
+	def withInitialState(self, initialState: State) :  
 		""" 
 		* Constructs a state machine with a special initial state
 		* 
@@ -187,7 +187,7 @@ class StateMachineBuilder:
 	 * Finishes building the Isa88StateMachine and returns a fresh instance with the given attributes
 	 * 
 	 * @return Fresh instance of Isa88StateMachine
-	 """
+	"""
 	def build(self) :
 		return self.stateMachine
 	

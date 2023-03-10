@@ -9,7 +9,7 @@ class IdleState (StoppableState):
 	"""
 
 	def start(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(StartingState())
+		coro = stateMachine.setStateAndRunAction(StartingState())
 
 	def hold(self, stateMachine: Isa88StateMachine):
 		pass # Hold cannot be fired from Idle -> Do nothing except maybe giving a warning

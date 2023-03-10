@@ -1,9 +1,9 @@
 
-from states.IState import IState
-from states.impl import ClearingState
+from states.State import State
+from states.impl.ClearingState import ClearingState
 from statemachine.Isa88StateMachine import Isa88StateMachine
 
-class AbortedState(IState):
+class AbortedState(State):
 	"""
 	The AbortedState denotes a state in which the machine has been brought to a sudden halt. A
 	clear-command is necessary to transition to StoppedState.
@@ -42,4 +42,4 @@ class AbortedState(IState):
 
 
 	def clear(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(ClearingState())
+		coro = stateMachine.setStateAndRunAction(ClearingState())

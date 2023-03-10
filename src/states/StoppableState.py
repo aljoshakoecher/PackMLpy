@@ -13,4 +13,4 @@ class StoppableState(AbortableState):
 		Inside of the thread: Update the state in the ontology to now be "Stopping"
 		When the thread is done: Update the state in the ontology to now be "Stopped" (might have to be done in the other thread as well)
 		"""
-		stateMachine.setStateAndRunAction(StoppingState())
+		coro = stateMachine.setStateAndRunAction(StoppingState())

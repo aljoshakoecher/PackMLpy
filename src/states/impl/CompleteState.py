@@ -24,7 +24,7 @@ class CompleteState (StoppableState):
 		pass # Unsuspend cannot be fired from Complete -> Do nothing except maybe giving a warning
 
 	def reset(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(ResettingState())
+		coro = stateMachine.setStateAndRunAction(ResettingState())
 
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Clearing -> Do nothing except maybe giving a warning

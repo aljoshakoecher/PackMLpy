@@ -31,11 +31,11 @@ class SuspendingState (StoppableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Suspending -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Suspending)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 
 		# Make sure the current state is still execute before going to Completing (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), SuspendingState)):
-			stateMachine.setStateAndRunAction(SuspendedState())
+			coro = stateMachine.setStateAndRunAction(SuspendedState())
 

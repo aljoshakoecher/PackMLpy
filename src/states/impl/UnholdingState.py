@@ -30,11 +30,11 @@ class UnholdingState (StoppableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Unholding -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Unholding)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 
 		# Make sure the current state is still Unholding before going to Execute (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), UnholdingState)):
-			stateMachine.setStateAndRunAction(ExecuteState())
+			coro = stateMachine.setStateAndRunAction(ExecuteState())
 

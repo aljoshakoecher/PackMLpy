@@ -17,7 +17,7 @@ class SuspendedState (StoppableState):
 	def suspend(self, stateMachine: Isa88StateMachine):
 		pass # Suspend cannot be fired from Suspended -> Do nothing except maybe giving a warning
 	def unsuspend(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(UnsuspendingState())
+		coro = stateMachine.setStateAndRunAction(UnsuspendingState())
 	def reset(self, stateMachine: Isa88StateMachine):
 		pass # Reset cannot be fired from Suspended -> Do nothing except maybe giving a warning
 	def clear(self, stateMachine: Isa88StateMachine):

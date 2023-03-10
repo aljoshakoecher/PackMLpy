@@ -15,13 +15,13 @@ class ExecuteState (StoppableState):
 		pass # Start cannot be fired from Execute -> Do nothing except maybe giving a warning
 
 	def hold(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(HoldingState())
+		coro = stateMachine.setStateAndRunAction(HoldingState())
 
 	def unhold(self, stateMachine: Isa88StateMachine):
 		pass # Unhold cannot be fired from Execute -> Do nothing except maybe giving a warning
 
 	def suspend(self, stateMachine: Isa88StateMachine):
-		stateMachine.setStateAndRunAction(SuspendingState())
+		coro = stateMachine.setStateAndRunAction(SuspendingState())
 
 	def unsuspend(self, stateMachine: Isa88StateMachine):
 		pass # Unsuspend cannot be fired from Execute -> Do nothing except maybe giving a warning
@@ -32,10 +32,10 @@ class ExecuteState (StoppableState):
 	def clear(self, stateMachine: Isa88StateMachine):
 		pass # Clear cannot be fired from Execute -> Do nothing except maybe giving a warning
 
-	def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
+	async def executeActionAndComplete(self, stateMachine: Isa88StateMachine):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Execute)
-		super.executeAction(actionToRun)
+		self.executeAction(actionToRun)
 		
 		# Make sure the current state is still Execute before going to Completing (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), ExecuteState)):
-			stateMachine.setStateAndRunAction(CompletingState())
+			coro = stateMachine.setStateAndRunAction(CompletingState())
