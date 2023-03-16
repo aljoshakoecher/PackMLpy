@@ -1,6 +1,8 @@
-from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
 from isa88py.states.AbortableState import AbortableState
-from isa88py.states.impl.ResettingState import ResettingState
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
 
 class StoppedState (AbortableState):
 	"""
@@ -8,24 +10,25 @@ class StoppedState (AbortableState):
 	reset-command will cause a transition from StoppedState to ResettingState.
 	"""
 
-	def start(self, stateMachine: Isa88StateMachine):
+	def start(self, stateMachine: 'Isa88StateMachine'):
 		pass # Start cannot be fired from Stopped -> Do nothing except maybe giving a warning
 
-	def hold(self, stateMachine: Isa88StateMachine):
+	def hold(self, stateMachine: 'Isa88StateMachine'):
 		pass # Hold cannot be fired from Stopped -> Do nothing except maybe giving a warning
 
-	def unhold(self, stateMachine: Isa88StateMachine):
+	def unhold(self, stateMachine: 'Isa88StateMachine'):
 		pass # Unhold cannot be fired from Stopped -> Do nothing except maybe giving a warning
 
-	def suspend(self, stateMachine: Isa88StateMachine):
+	def suspend(self, stateMachine: 'Isa88StateMachine'):
 		pass # Suspend cannot be fired from Stopped -> Do nothing except maybe giving a warning
 
-	def unsuspend(self, stateMachine: Isa88StateMachine):
+	def unsuspend(self, stateMachine: 'Isa88StateMachine'):
 		pass # Unsuspend cannot be fired from Stopped -> Do nothing except maybe giving a warning
 
-	def reset(self, stateMachine: Isa88StateMachine):
+	def reset(self, stateMachine: 'Isa88StateMachine'):
+		from isa88py.states.impl.ResettingState import ResettingState
 		coro = stateMachine.setStateAndRunAction(ResettingState())
 
-	def clear(self, stateMachine: Isa88StateMachine):
+	def clear(self, stateMachine: 'Isa88StateMachine'):
 		pass # Clear cannot be fired from Stopped -> Do nothing except maybe giving a warning
 

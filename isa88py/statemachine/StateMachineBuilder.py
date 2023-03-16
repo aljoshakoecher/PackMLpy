@@ -1,21 +1,25 @@
-from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
-from isa88py.states.State import State
-from isa88py.states.StateAction import StateAction
 from isa88py.states.ActiveStateName import ActiveStateName
 from isa88py.states.impl.IdleState import IdleState
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from isa88py.states.State import State
+	from isa88py.states.StateAction import StateAction
+
 
 class StateMachineBuilder:
 	"""
 	Builder class that is in charge of constructing a properly set up Isa88StateMachine
 	"""
+	from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
 
 	stateMachine: Isa88StateMachine
 
 	def __init__(self):
-		self.stateMachine = Isa88StateMachine(IdleState())
+		self.stateMachine = self.Isa88StateMachine(IdleState())
 
 	
-	def withInitialState(self, initialState: State) :  
+	def withInitialState(self, initialState: 'State') :  
 		""" 
 		* Constructs a state machine with a special initial state
 		* 
@@ -34,7 +38,7 @@ class StateMachineBuilder:
 	 * @param stateName Name of the State that the action will be executed in.
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withAction(self, action: StateAction, stateName: ActiveStateName) :
+	def withAction(self, action: 'StateAction', stateName: ActiveStateName) :
 		match stateName:
 			case ActiveStateName.Starting:
 				self.stateMachine.getStateActionManager().setAction(action, ActiveStateName.Starting)
@@ -68,7 +72,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in StartingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInStarting(self, action: StateAction) :
+	def withActionInStarting(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Starting)
 		return self
 	
@@ -79,7 +83,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in ExecuteState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInExecute(self, action: StateAction) :
+	def withActionInExecute(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Execute)
 		return self
 	
@@ -90,7 +94,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in CompletingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInCompleting(self, action: StateAction) :
+	def withActionInCompleting(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Completing)
 		return self
 	
@@ -101,7 +105,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in SuspendingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInSuspending(self, action: StateAction) :
+	def withActionInSuspending(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Suspending)
 		return self
 	
@@ -112,7 +116,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in UnsuspendingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInUnsuspending(self, action: StateAction) :
+	def withActionInUnsuspending(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Unsuspending)
 		return self
 	
@@ -123,7 +127,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in HoldingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInHolding(self, action: StateAction) :
+	def withActionInHolding(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Holding)
 		return self
 	
@@ -134,7 +138,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in UnholdingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInUnholding(self, action: StateAction) :
+	def withActionInUnholding(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Unholding)
 		return self
 	
@@ -145,7 +149,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in ResettingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInResetting(self, action: StateAction) :
+	def withActionInResetting(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Resetting)
 		return self
 	
@@ -156,7 +160,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in StoppingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInStopping(self, action: StateAction) :
+	def withActionInStopping(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Stopping)
 		return self
 	
@@ -167,7 +171,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in AbortingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInAborting(self, action: StateAction) :
+	def withActionInAborting(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Aborting)
 		return self
 	
@@ -178,7 +182,7 @@ class StateMachineBuilder:
 	 * @param action An instance of IStateAction that is executed in ClearingState
 	 * @return This StateMachineBuilder instance to use for further construction operations
 	"""
-	def withActionInClearing(self, action: StateAction) :
+	def withActionInClearing(self, action: 'StateAction') :
 		self.withAction(action, ActiveStateName.Clearing)
 		return self
 	

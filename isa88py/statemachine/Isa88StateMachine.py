@@ -1,22 +1,25 @@
 from isa88py.states.TransitionNames import TransitionNames
+from isa88py.statemachine.StateActionManager import StateActionManager
 import asyncio
+from typing import TYPE_CHECKING
 
-
-class Isa88StateMachine:
+if TYPE_CHECKING:
 	from isa88py.states.State import State	# Import inside class to avoid circular dependency with IState -- State -- StateMachine
-	from isa88py.statemachine.StateActionManager import StateActionManager
 	from isa88py.statemachine.StateChangeObserver import StateChangeObserver
 
-	currentState: State
-	stateActionManager = StateActionManager()
-	stateChangeObservers: list[StateChangeObserver] = list()
-	# private ExecutorService actionExecutor = Executors.newSingleThreadExecutor();
-	runningAction: asyncio.Task 
+class Isa88StateMachine:
+
+	# currentState: 'State'
+	
+	# runningAction: asyncio.Task 
     
-	def __init__(self, initialState: State):
+	def __init__(self, initialState: 'State'):
 		self.currentState = initialState
+		self.stateActionManager = StateActionManager()
+		self.stateChangeObservers: list['StateChangeObserver'] = list()
 
 	def invokeTransition(self, transitionName: TransitionNames):
+		from isa88py.states.State import State	# Import inside class to avoid circular dependency with IState -- State -- StateMachine
 		match transitionName:
 			case TransitionNames.start:
 				self.currentState.start(self)
@@ -99,7 +102,7 @@ class Isa88StateMachine:
 	
 
 
-	def getState(self) -> State:
+	def getState(self) -> 'State':
 		"""
 		Returns the current state of self state machine.
 		return: The current state instance
@@ -107,7 +110,7 @@ class Isa88StateMachine:
 		return self.currentState
 	
 
-	def setState(self, state: State):
+	def setState(self, state: 'State'):
 		"""
 		Sets the current state of the StateMachine.
 		state: The new state that will be set as the current state
@@ -116,7 +119,7 @@ class Isa88StateMachine:
 	
 
 	
-	async def setStateAndRunAction(self, state: State):
+	async def setStateAndRunAction(self, state: 'State'):
 		"""
 		Sets the current state of the StateMachine and runs self state's action.
 		state: The new state that will be set as the current state
@@ -139,7 +142,7 @@ class Isa88StateMachine:
 	
 
 	
-	def getStateActionManager(self) -> StateActionManager:
+	def getStateActionManager(self) -> 'StateActionManager':
 		"""
 		Returns the StateActionManager of self state machine.
 		@return This state machine's state manager instance
@@ -147,7 +150,7 @@ class Isa88StateMachine:
 		return self.stateActionManager
 	
 
-	def addStateChangeObserver(self, observer: StateChangeObserver) :
+	def addStateChangeObserver(self, observer: 'StateChangeObserver') :
 		"""
 		Adds a new StateChangeObserver instance to the list of observers.
 		observer: The new observer to add.
@@ -155,11 +158,9 @@ class Isa88StateMachine:
 		self.stateChangeObservers.append(observer)
 	
 
-	def removeStateChangeObserver(self, observer: StateChangeObserver):
+	def removeStateChangeObserver(self, observer: 'StateChangeObserver'):
 		"""
 		Removes a given StateChangeObserver instance from the list of observers.
 		observer: The observer that is going to be removed.
 		"""
 		self.stateChangeObservers.remove(observer)
-	
-

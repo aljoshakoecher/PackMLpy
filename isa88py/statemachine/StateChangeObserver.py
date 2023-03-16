@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from isa88py.states.State import State
 
 class StateChangeObserver(ABC) :
-	from isa88py.states.IState import IState
 
 	@abstractmethod
-	def onStateChanged(self, newState: IState):
+	def onStateChanged(self, newState: 'State'):
 		"""
 		Gets called every time the state of a state machine changes
 		@param newState The new state that the state machine is in.
