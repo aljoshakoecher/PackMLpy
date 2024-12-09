@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-	from isa88py.states.State import State
+	from packmlpy.states.State import State
 
 class StateChangeObserver(ABC) :
 

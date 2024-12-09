@@ -1,28 +1,33 @@
-from isa88py.states.TransitionNames import TransitionNames
-from isa88py.statemachine.StateActionManager import StateActionManager
+from packmlpy.states.TransitionNames import TransitionNames
+from packmlpy.statemachine.StateActionManager import StateActionManager
 import asyncio
+import time
+from concurrent.futures import ProcessPoolExecutor
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-	from isa88py.states.State import State	# Import inside class to avoid circular dependency with IState -- State -- StateMachine
-	from isa88py.statemachine.StateChangeObserver import StateChangeObserver
+	from packmlpy.states.State import State	# Import inside class to avoid circular dependency with IState -- State -- StateMachine
+	from packmlpy.statemachine.StateChangeObserver import StateChangeObserver
 
-class Isa88StateMachine:
+class PackMlStateMachine:
 
-	# currentState: 'State'
-	
-	# runningAction: asyncio.Task 
-    
 	def __init__(self, initialState: 'State'):
+		self.taskChecklist = list[asyncio.Task]()
+		self.loop = asyncio.get_event_loop()
+		self.runningTask: asyncio.Task
 		self.currentState = initialState
 		self.stateActionManager = StateActionManager()
 		self.stateChangeObservers: list['StateChangeObserver'] = list()
 
+	def setTask(self, task: asyncio.Task):
+		self.taskChecklist.append(task)
+		self.runningTask = task
+
 	def invokeTransition(self, transitionName: TransitionNames):
-		from isa88py.states.State import State	# Import inside class to avoid circular dependency with IState -- State -- StateMachine
+		from packmlpy.states.State import State	# Import inside class to avoid circular dependency with IState -- State -- StateMachine
 		match transitionName:
 			case TransitionNames.start:
-				self.currentState.start(self)
+				self.start()
 			case TransitionNames.hold:
 				self.currentState.hold(self)
 			case TransitionNames.unhold:
@@ -32,7 +37,7 @@ class Isa88StateMachine:
 			case TransitionNames.unsuspend:
 				self.currentState.unsuspend(self)
 			case TransitionNames.reset:
-				self.currentState.reset(self)
+				self.reset()
 			case TransitionNames.stop:
 				self.currentState.stop(self)
 			case TransitionNames.abort:
@@ -119,14 +124,16 @@ class Isa88StateMachine:
 	
 
 	
-	async def setStateAndRunAction(self, state: 'State'):
+	def setStateAndRunAction(self, state: 'State'):
 		"""
 		Sets the current state of the StateMachine and runs self state's action.
 		state: The new state that will be set as the current state
 		"""
 		# Stop the current action if there is one
-		if(self.runningAction != None):
-			self.runningAction.cancel()
+		if hasattr(self, "runningTask") and (self.runningTask.done() is False):
+			print("trying to cancel, there are tasks: ", len(self.taskChecklist))
+			self.taskChecklist.pop()
+			self.runningTask.cancel()
 
 		# Set the new state and notify all observers
 		self.currentState = state
@@ -134,21 +141,17 @@ class Isa88StateMachine:
 			observer.onStateChanged(self.currentState)
 		
 		# Execute the action of the new state
-		self.runningAction = asyncio.create_task(self.currentState.executeActionAndComplete(self))
-		
-		# self.runningAction = executor.submit(() -> :
-		# 	self.currentState.executeActionAndComplete(self)
-		# )
-	
+		print("new task for execute action and complete", time.time())
+		self.setTask(asyncio.create_task(self.currentState.executeActionAndComplete(self)))
 
-	
+
 	def getStateActionManager(self) -> 'StateActionManager':
 		"""
 		Returns the StateActionManager of self state machine.
 		@return This state machine's state manager instance
 		"""
 		return self.stateActionManager
-	
+
 
 	def addStateChangeObserver(self, observer: 'StateChangeObserver') :
 		"""

@@ -8,7 +8,7 @@
 			"name": "Python: Test Current File",
 			"type": "python",
 			"request": "launch",
-			"pythonPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+			"python": "${workspaceFolder}/.venv/Scripts/python.exe",
 			"cwd": "${workspaceFolder}",
 			"module": "pytest",
 			"args": [

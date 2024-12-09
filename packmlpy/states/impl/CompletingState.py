@@ -1,10 +1,11 @@
-from isa88py.states.ActiveStateName import ActiveStateName
-from isa88py.states.StoppableState import StoppableState
-from isa88py.states.impl.CompleteState import CompleteState
+from packmlpy.states.ActiveStateName import ActiveStateName
+from packmlpy.states.StoppableState import StoppableState
+from packmlpy.states.impl.CompleteState import CompleteState
 from typing import TYPE_CHECKING
+import asyncio
 
 if TYPE_CHECKING:
-	from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
+	from packmlpy.statemachine.PackMlStateMachine import PackMlStateMachine
 
 class CompletingState (StoppableState):
 	"""
@@ -12,32 +13,32 @@ class CompletingState (StoppableState):
 	have been produced). After the completing action has been executed, the state machine will change to the ExecuteState.
 	"""
 
-	def start(self, stateMachine: 'Isa88StateMachine'):
+	def start(self, stateMachine: 'PackMlStateMachine'):
 		pass # Start cannot be fired from Completing -> Do nothing except maybe giving a warning
 
-	def hold(self, stateMachine: 'Isa88StateMachine'):
+	def hold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Hold cannot be fired from Completing -> Do nothing except maybe giving a warning
 
-	def unhold(self, stateMachine: 'Isa88StateMachine'):
+	def unhold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unhold cannot be fired from Completing -> Do nothing except maybe giving a warning
 
-	def suspend(self, stateMachine: 'Isa88StateMachine'):
+	def suspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Start cannot be fired from Completing -> Do nothing except maybe giving a warning
 
-	def unsuspend(self, stateMachine: 'Isa88StateMachine'):
+	def unsuspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unsuspend cannot be fired from Completing -> Do nothing except maybe giving a warning
 
-	def reset(self, stateMachine: 'Isa88StateMachine'):
+	def reset(self, stateMachine: 'PackMlStateMachine'):
 		pass # Reset cannot be fired from Completing -> Do nothing except maybe giving a warning
 
-	def clear(self, stateMachine: 'Isa88StateMachine'):
+	def clear(self, stateMachine: 'PackMlStateMachine'):
 		pass # Clear cannot be fired from Completing -> Do nothing except maybe giving a warning
 
-	async def executeActionAndComplete(self, stateMachine: 'Isa88StateMachine'):
+	async def executeActionAndComplete(self, stateMachine: 'PackMlStateMachine'):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Completing)
-		self.executeAction(actionToRun)
-
+		await self.executeAction(actionToRun)
+		
 		# Make sure the current state is still Completing before going to Complete (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), CompletingState)):
-			coro = stateMachine.setStateAndRunAction(CompleteState())
+			stateMachine.setStateAndRunAction(CompleteState())
 

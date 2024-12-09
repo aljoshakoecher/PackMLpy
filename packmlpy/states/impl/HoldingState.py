@@ -1,10 +1,11 @@
-from isa88py.states.ActiveStateName import ActiveStateName
-from isa88py.states.StoppableState import StoppableState
-from isa88py.states.impl.HeldState import HeldState
+from packmlpy.states.ActiveStateName import ActiveStateName
+from packmlpy.states.StoppableState import StoppableState
+from packmlpy.states.impl.HeldState import HeldState
 from typing import TYPE_CHECKING
+import asyncio
 
 if TYPE_CHECKING:
-	from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
+	from packmlpy.statemachine.PackMlStateMachine import PackMlStateMachine
 
 class HoldingState (StoppableState):
 	"""
@@ -12,32 +13,32 @@ class HoldingState (StoppableState):
 	having completed holding procedure, the state machine will change to the HeldState.
 	"""	
 
-	def start(self, stateMachine: 'Isa88StateMachine'):
+	def start(self, stateMachine: 'PackMlStateMachine'):
 		pass # Start cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	def hold(self, stateMachine: 'Isa88StateMachine'):
+	def hold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Hold cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	def unhold(self, stateMachine: 'Isa88StateMachine'):
+	def unhold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unhold cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	def suspend(self, stateMachine: 'Isa88StateMachine'):
+	def suspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Start cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	def unsuspend(self, stateMachine: 'Isa88StateMachine'):
+	def unsuspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unsuspend cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	def reset(self, stateMachine: 'Isa88StateMachine'):
+	def reset(self, stateMachine: 'PackMlStateMachine'):
 		pass # Reset cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	def clear(self, stateMachine: 'Isa88StateMachine'):
+	def clear(self, stateMachine: 'PackMlStateMachine'):
 		pass # Clear cannot be fired from Holding -> Do nothing except maybe giving a warning
 
-	async def executeActionAndComplete(self, stateMachine: 'Isa88StateMachine'):
+	async def executeActionAndComplete(self, stateMachine: 'PackMlStateMachine'):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Holding)
-		self.executeAction(actionToRun)
+		await self.executeAction(actionToRun)
 		
 		# Make sure the current state is still Holding before going to Held (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), HoldingState)):
-			coro = stateMachine.setStateAndRunAction(HeldState())
+			stateMachine.setStateAndRunAction(HeldState())
 

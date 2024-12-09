@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "isa88py"
+name = "PackMLpy"
 version = "0.1.0"
 license = "MIT"
-description = "A Python implementation of the state machine defined in ISA 88 / PackML / IEC 61512"
+description = "A Python implementation of the state machine defined in PackML / ISA 88 / IEC 61512"
 authors = ["Aljosha Koecher <aljosha.koecher@hsu-hh.de>"]
 readme = "README.md"
-repository = "https://github.com/aljoshakoecher/ISA88py"
-homepage = "https://github.com/aljoshakoecher/ISA88py"
-keywords = ['StateMachine', 'ISA88', 'Finite State Machine', 'FSM']
+repository = "https://github.com/aljoshakoecher/PackMLpy"
+homepage = "https://github.com/aljoshakoecher/PackMLpy"
+keywords = ['StateMachine', 'PackML', 'ISA88', 'Finite State Machine', 'FSM']
 classifiers=[
 	'Development Status :: 3 - Alpha',      # "3 - Alpha", "4 - Beta" or "5 - Production/Stable" -> current state of your package
 	'Intended Audience :: Developers',      # Define that your audience are developers
@@ -26,7 +26,8 @@ python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.2"
-pytest-order="^1.1.0"
+pytest-order = "^1.1.0"
+pytest-asyncio = "^0.20.3"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,10 +1,12 @@
-from isa88py.states.ActiveStateName import ActiveStateName
-from isa88py.states.StoppableState import StoppableState
-from isa88py.states.impl.ExecuteState import ExecuteState
+from packmlpy.states.ActiveStateName import ActiveStateName
+from packmlpy.states.StoppableState import StoppableState
+from packmlpy.states.impl.ExecuteState import ExecuteState
 from typing import TYPE_CHECKING
+import time
+import asyncio
 
 if TYPE_CHECKING:
-	from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
+	from packmlpy.statemachine.PackMlStateMachine import PackMlStateMachine
 
 class StartingState (StoppableState):
 	"""
@@ -12,32 +14,33 @@ class StartingState (StoppableState):
 	the state machine will change to the ExecuteState.
 	"""
 
-	def start(self, stateMachine: 'Isa88StateMachine'):
+	def start(self, stateMachine: 'PackMlStateMachine'):
 		pass # Start cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	def hold(self, stateMachine: 'Isa88StateMachine'):
+	def hold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Hold cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	def unhold(self, stateMachine: 'Isa88StateMachine'):
+	def unhold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unhold cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	def suspend(self, stateMachine: 'Isa88StateMachine'):
+	def suspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Start cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	def unsuspend(self, stateMachine: 'Isa88StateMachine'):
+	def unsuspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unsuspend cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	def reset(self, stateMachine: 'Isa88StateMachine'):
+	def reset(self, stateMachine: 'PackMlStateMachine'):
 		pass # Reset cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	def clear(self, stateMachine: 'Isa88StateMachine'):
+	def clear(self, stateMachine: 'PackMlStateMachine'):
 		pass # Clear cannot be fired from Starting -> Do nothing except maybe giving a warning
 
-	async def executeActionAndComplete(self, stateMachine: 'Isa88StateMachine'):
+	async def executeActionAndComplete(self, stateMachine: 'PackMlStateMachine'):
 		actionToRun = stateMachine.getStateActionManager().getAction(ActiveStateName.Starting)
-		self.executeAction(actionToRun)
-		
+		print("before action", time.time())
+		await self.executeAction(actionToRun)
 		# Make sure the current state is still Starting before going to Execute (could have been changed in the mean time).
 		if (isinstance(stateMachine.getState(), StartingState)):
-			coro = stateMachine.setStateAndRunAction(ExecuteState())
+			print("going to execute", time.time())
+			stateMachine.setStateAndRunAction(ExecuteState())
 

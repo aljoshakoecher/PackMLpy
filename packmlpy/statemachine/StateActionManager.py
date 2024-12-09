@@ -1,6 +1,6 @@
-from isa88py.states.StateAction import StateAction
-from isa88py.states.NullStateAction import NullStateAction
-from isa88py.states.ActiveStateName import ActiveStateName
+from packmlpy.states.StateAction import StateAction
+from packmlpy.states.NullStateAction import NullStateAction
+from packmlpy.states.ActiveStateName import ActiveStateName
 
 class StateActionManager:
 
@@ -47,23 +47,24 @@ class StateActionManager:
 		match stateName:
 			case ActiveStateName.Starting:
 				self.actionInStarting = action
-			case ActiveStateName.Starting:
-				self.actionInExecute = action
-			case ActiveStateName.Starting:
-				self.actionInCompleting = action
-			case ActiveStateName.Starting:
-				self.actionInHolding = action
-			case ActiveStateName.Starting:
-				self.actionInUnholding = action
-			case ActiveStateName.Starting:
-				self.actionInSuspending = action
-			case ActiveStateName.Starting:
-				self.actionInUnsuspending = action
-			case ActiveStateName.Starting:
-				self.actionInStopping = action
-			case ActiveStateName.Starting:
-				self.actionInClearing = action
-			case ActiveStateName.Starting:
-				self.actionInAborting = action
-			case ActiveStateName.Starting:
+			case ActiveStateName.Execute:
 				self.actionInResetting = action
+			case ActiveStateName.Completing:
+				self.actionInExecute = action
+			case ActiveStateName.Holding:
+				self.actionInCompleting = action
+			case ActiveStateName.Suspending:
+				self.actionInHolding = action
+			case ActiveStateName.Unholding:
+				self.actionInUnholding = action
+			case ActiveStateName.Unsuspending:
+				self.actionInSuspending = action
+			case ActiveStateName.Stopping:
+				self.actionInUnsuspending = action
+			case ActiveStateName.Aborting:
+				self.actionInStopping = action
+			case ActiveStateName.Clearing:
+				self.actionInClearing = action
+			case ActiveStateName.Resetting:
+				self.actionInAborting = action
+			

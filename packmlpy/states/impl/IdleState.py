@@ -1,8 +1,9 @@
-from isa88py.states.StoppableState import StoppableState
+from packmlpy.states.StoppableState import StoppableState
 from typing import TYPE_CHECKING
+import asyncio
 
 if TYPE_CHECKING:
-	from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
+	from packmlpy.statemachine.PackMlStateMachine import PackMlStateMachine
 
 class IdleState (StoppableState):
 	"""
@@ -10,26 +11,26 @@ class IdleState (StoppableState):
 	has to be issued in order to start production and bring the state machine to the StartingState.
 	"""
 	
-	from isa88py.states.impl.StartingState import StartingState
+	from packmlpy.states.impl.StartingState import StartingState
 
-	def start(self, stateMachine: 'Isa88StateMachine'):
-		coro = stateMachine.setStateAndRunAction(self.StartingState())
+	def start(self, stateMachine: 'PackMlStateMachine'):
+		stateMachine.setStateAndRunAction(self.StartingState())
 
-	def hold(self, stateMachine: 'Isa88StateMachine'):
+	def hold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Hold cannot be fired from Idle -> Do nothing except maybe giving a warning
 
-	def unhold(self, stateMachine: 'Isa88StateMachine'):
+	def unhold(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unhold cannot be fired from Idle -> Do nothing except maybe giving a warning
 
-	def suspend(self, stateMachine: 'Isa88StateMachine'):
+	def suspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Suspend cannot be fired from Idle -> Do nothing except maybe giving a warning
 
-	def unsuspend(self, stateMachine: 'Isa88StateMachine'):
+	def unsuspend(self, stateMachine: 'PackMlStateMachine'):
 		pass # Unsuspend cannot be fired from Idle -> Do nothing except maybe giving a warning
 
-	def reset(self, stateMachine: 'Isa88StateMachine'):
+	def reset(self, stateMachine: 'PackMlStateMachine'):
 		pass # Reset cannot be fired from Idle -> Do nothing except maybe giving a warning
 
-	def clear(self, stateMachine: 'Isa88StateMachine'):
+	def clear(self, stateMachine: 'PackMlStateMachine'):
 		pass # Clear cannot be fired from Idle -> Do nothing except maybe giving a warning
 

@@ -1,22 +1,21 @@
-from isa88py.states.ActiveStateName import ActiveStateName
-from isa88py.states.impl.IdleState import IdleState
+from packmlpy.states.ActiveStateName import ActiveStateName
+from packmlpy.statemachine.PackMlStateMachine import PackMlStateMachine
+from packmlpy.states.impl.IdleState import IdleState
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-	from isa88py.states.State import State
-	from isa88py.states.StateAction import StateAction
+	from packmlpy.states.State import State
+	from packmlpy.states.StateAction import StateAction
 
 
 class StateMachineBuilder:
 	"""
-	Builder class that is in charge of constructing a properly set up Isa88StateMachine
+	Builder class that is in charge of constructing a properly set up PackMlStateMachine
 	"""
-	from isa88py.statemachine.Isa88StateMachine import Isa88StateMachine
-
-	stateMachine: Isa88StateMachine
+	
 
 	def __init__(self):
-		self.stateMachine = self.Isa88StateMachine(IdleState())
+		self.stateMachine = PackMlStateMachine(IdleState())
 
 	
 	def withInitialState(self, initialState: 'State') :  
@@ -188,9 +187,9 @@ class StateMachineBuilder:
 	
 
 	"""
-	 * Finishes building the Isa88StateMachine and returns a fresh instance with the given attributes
+	 * Finishes building the PackMlStateMachine and returns a fresh instance with the given attributes
 	 * 
-	 * @return Fresh instance of Isa88StateMachine
+	 * @return Fresh instance of PackMlStateMachine
 	"""
 	def build(self) :
 		return self.stateMachine
