@@ -1,7 +1,7 @@
 # PackMLpy
 A Python implementation of the state machine defined in PackML / ISA88 and in a similar way in IEC 61512. The state machine guarantees that only 'valid' transitions can be executed. Have a look at the following figure which depicts the state machine of PackML:
 
-![State machine as defined in PackML (figure taken from http://omac.org/wp-content/uploads/2016/11/PackML_Unit_Machine_Implementation_Guide-V1-00.pdf](https://github.com/aljoshakoecher/PackMLpy/blob/documentation/images/images/PackML-StateMachine.png?raw=true)
+![State machine as defined in PackML (figure taken from http://omac.org/wp-content/uploads/2016/11/PackML_Unit_Machine_Implementation_Guide-V1-00.pdf](https://github.com/aljoshakoecher/PackMLpy/blob/documentation/images/images/PackML-State-Machine.png?raw=true)
 
 As you can see in the figure, the state machine defines states and transitions that can be fired on certain states. Here are some examples:
 * A 'start'-transition only brings the state machine to the 'Starting' state when it is currently in 'Idle' state
