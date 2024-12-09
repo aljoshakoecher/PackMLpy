@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "PackMLpy"
+name = "packmlpy"
 version = "0.1.0"
 license = "MIT"
 description = "A Python implementation of the state machine defined in PackML / ISA 88 / IEC 61512"
